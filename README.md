@@ -2,6 +2,11 @@
 
 UI for [langgraph_distributed_agent](https://github.com/SelfRefLab/langgraph_distributed_agent)
 
+
+https://github.com/user-attachments/assets/6ef83c79-cb42-4cab-8359-27dfb74cdc65
+
+
+
 ## Getting Started
 
 1. Create a `.env` file in the project root:
