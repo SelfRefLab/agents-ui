@@ -14,6 +14,21 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
     const { theme } = useTheme();
     const syntaxTheme = theme === 'dark' ? oneDark : oneLight;
 
+    let markdownContent = content;
+
+    const match = content.match(/Arguments:\s*({[\s\S]*})/);
+    if (match) {
+        try {
+            const parsed = JSON.parse(match[1]);
+            if (parsed && typeof parsed === 'object' && 'code' in parsed) {
+                const codeBlock = `\n\`\`\`python\n${parsed.code}\n\`\`\`\n`;
+                const before = content.slice(0, match.index! + match[0].indexOf('{')).split('Arguments:')[0];
+                markdownContent = before + codeBlock;
+            }
+        } catch (err) {
+        }
+    }
+
     return (
         <div className={`markdown-content ${className}`}>
             <ReactMarkdown
@@ -21,39 +36,39 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
                 components={{
                     // Headers
                     h1: ({ children }) => (
-                        <h1 className="text-2xl font-bold text-foreground mb-2 pb-2 border-b border-border" style={{ lineHeight: 1}}>
+                        <h1 className="text-2xl font-bold text-foreground mb-2 pb-2 border-b border-border" >
                             {children}
                         </h1>
                     ),
                     h2: ({ children }) => (
-                        <h2 className="text-xl font-semibold text-foreground pb-1 mb-2 border-b border-border" style={{ lineHeight: 1}}>
+                        <h2 className="text-xl font-semibold text-foreground pb-1 mb-2 border-b border-border" >
                             {children}
                         </h2>
                     ),
                     h3: ({ children }) => (
-                        <h3 className="text-lg font-semibold text-foreground" style={{ lineHeight: 1}}>
+                        <h3 className="text-lg font-semibold text-foreground" >
                             {children}
                         </h3>
                     ),
                     h4: ({ children }) => (
-                        <h4 className="text-base font-semibold text-foreground" style={{ lineHeight: 1}}>
+                        <h4 className="text-base font-semibold text-foreground" >
                             {children}
                         </h4>
                     ),
                     h5: ({ children }) => (
-                        <h5 className="text-sm font-semibold text-foreground" style={{ lineHeight: 1}}>
+                        <h5 className="text-sm font-semibold text-foreground" >
                             {children}
                         </h5>
                     ),
                     h6: ({ children }) => (
-                        <h6 className="text-xs font-semibold text-foreground" style={{ lineHeight: 1}}>
+                        <h6 className="text-xs font-semibold text-foreground" >
                             {children}
                         </h6>
                     ),
 
                     // Paragraphs
                     p: ({ children }) => (
-                        <p className="text-foreground leading-relaxed">
+                        <p className="text-foreground leading-relaxed" style={{whiteSpace: "pre-wrap"}}>
                             {children}
                         </p>
                     ),
@@ -63,6 +78,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
                         const match = /language-(\w+)/.exec(className || '');
                         const language = match ? match[1] : '';
                         const isInline = !match;
+                        
 
                         if (!isInline && language) {
                             return (
@@ -97,17 +113,17 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
 
                     // Lists
                     ul: ({ children }) => (
-                        <ul className="list-disc list-outside space-y-1 text-foreground ml-6" style={{ lineHeight: 1}}>
+                        <ul className="list-disc list-outside space-y-1 text-foreground ml-6" >
                             {children}
                         </ul>
                     ),
                     ol: ({ children }) => (
-                        <ol className="list-decimal list-outside space-y-1 text-foreground ml-6" style={{ lineHeight: 1}}>
+                        <ol className="list-decimal list-outside space-y-1 text-foreground ml-6" >
                             {children}
                         </ol>
                     ),
                     li: ({ children }) => (
-                        <li className="text-foreground pl-1" style={{ lineHeight: 1}}>
+                        <li className="text-foreground pl-1" >
                             {children}
                         </li>
                     ),
@@ -208,7 +224,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
                     ),
                 }}
             >
-                {content}
+                {markdownContent}
             </ReactMarkdown>
         </div>
     );

@@ -105,8 +105,8 @@ export interface AgentOption {
 
 export const AVAILABLE_AGENTS: AgentOption[] = [
   {
-    id: 'agent_demo',
-    name: 'agent_demo',
-    displayName: 'agent_demo'
+    id: 'main_agent',
+    name: 'main_agent',
+    displayName: 'main_agent'
   }
 ];

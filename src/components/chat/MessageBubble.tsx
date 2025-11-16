@@ -123,7 +123,7 @@ export function MessageBubble({ message, onInterruptResponse }: MessageBubblePro
 
           {/* Message content with collapse */}
           <div className={cn(
-            "whitespace-pre-wrap break-words leading-relaxed relative",
+            "break-words leading-relaxed relative",
             isUser ? "text-primary-foreground" : "text-card-foreground",
             isCollapsed ? "max-h-40 overflow-hidden" : "",
             "pt-6"
