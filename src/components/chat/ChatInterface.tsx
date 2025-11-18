@@ -229,10 +229,20 @@ export function ChatInterface({ contextId, selectedAgent }: { contextId?: string
           } as ChatMessage;
         }).filter((msg: ChatMessage) => msg.content && msg.content.trim() !== '');
 
+        // @lanxuanli
+        let lastAgentName: string | undefined;
+        if (convertedMessages.length > 0) {
+            const lastMsg = convertedMessages[convertedMessages.length - 1];
+            if (lastMsg.sender === 'agent') {
+                lastAgentName = lastMsg.agent;
+            }
+        }
+
         setSession(prev => ({
           ...prev,
           context_id: contextId,
-          messages: convertedMessages
+          messages: convertedMessages,
+          currentAgent: lastAgentName
         }));
       } else {
         console.log('Chat history is not an array:', chatHistory);
